@@ -29,6 +29,14 @@ var CATALOG = {
   ]
 };
 
+// La primera opcion de "Continuar viendo" usa un video real de YouTube:
+// miniatura real como preview y reproduccion a pantalla completa al seleccionarla.
+CATALOG.rows[0].items[0].youtubeId = "dQw4w9WgXcQ";
+CATALOG.rows[0].items[0].image = "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg";
+
+CATALOG.rows[0].items[1].youtubeId = "5Ir6-uQCQK0";
+CATALOG.rows[0].items[1].image = "https://img.youtube.com/vi/5Ir6-uQCQK0/hqdefault.jpg";
+
 function makeItems(seedPrefix, count) {
   var items = [];
   for (var i = 1; i <= count; i++) {

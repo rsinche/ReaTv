@@ -9,6 +9,23 @@
     }
   }
 
+  function requestFullscreenOnFirstInput() {
+    function enter() {
+      document.removeEventListener("keydown", enter);
+      document.removeEventListener("click", enter);
+      var el = document.documentElement;
+      var request = el.requestFullscreen || el.webkitRequestFullscreen ||
+        el.mozRequestFullScreen || el.msRequestFullscreen;
+      if (request) {
+        try { request.call(el); } catch (e) {
+          // El navegador rechazo la solicitud (por ejemplo, ya esta en fullscreen).
+        }
+      }
+    }
+    document.addEventListener("keydown", enter);
+    document.addEventListener("click", enter);
+  }
+
   function exitApp() {
     try {
       if (typeof tizen !== "undefined" && tizen.application) {
@@ -54,8 +71,12 @@
         card.appendChild(cardTitle);
 
         card.addEventListener("click", function () {
-          // Punto de integración: abrir pantalla de reproducción/detalle para item.id
-          console.log("Abrir contenido:", item.id);
+          if (item.youtubeId) {
+            PLAYER.open(item.youtubeId);
+          } else {
+            // Punto de integración: abrir pantalla de reproducción/detalle para item.id
+            console.log("Abrir contenido:", item.id);
+          }
         });
 
         trackEl.appendChild(card);
@@ -94,10 +115,12 @@
   }
 
   function init() {
+    requestFullscreenOnFirstInput();
     registerTizenBackKey();
     renderHero(CATALOG.hero);
     renderRows(CATALOG.rows);
     SEARCH.init();
+    PLAYER.init();
 
     NAV.init();
     NAV.setRows(buildNavRows());
@@ -107,7 +130,9 @@
       el.scrollIntoView({ block: "nearest", inline: "nearest" });
     });
     NAV.setBackHandler(function () {
-      if (SEARCH.isOpen()) {
+      if (PLAYER.isOpen()) {
+        PLAYER.close();
+      } else if (SEARCH.isOpen()) {
         SEARCH.close();
       } else {
         exitApp();
