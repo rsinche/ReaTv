@@ -90,7 +90,11 @@ var SEARCH = (function () {
       card.appendChild(cardTitle);
 
       card.addEventListener("click", function () {
-        console.log("Abrir contenido:", item.id);
+        if (item.youtubeId) {
+          PLAYER.open(item.youtubeId);
+        } else {
+          console.log("Abrir contenido:", item.id);
+        }
       });
 
       resultsTrackEl.appendChild(card);

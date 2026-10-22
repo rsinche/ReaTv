@@ -8,6 +8,7 @@ var NAV = (function () {
   var colIndex = 0;
   var onFocusChange = null;
   var backHandler = null;
+  var keyHandler = null; // cuando esta activo, intercepta TODAS las teclas (ej: reproductor de video)
 
   function setRows(newRows) {
     rows = newRows;
@@ -64,8 +65,20 @@ var NAV = (function () {
     backHandler = fn;
   }
 
+  function setKeyHandler(fn) {
+    keyHandler = fn;
+  }
+
+  function clearKeyHandler() {
+    keyHandler = null;
+  }
+
   function init() {
     document.addEventListener("keydown", function (e) {
+      if (typeof keyHandler === "function") {
+        keyHandler(e);
+        return;
+      }
       switch (e.keyCode) {
         case 37: move("left"); e.preventDefault(); break;   // left
         case 38: move("up"); e.preventDefault(); break;     // up
@@ -73,6 +86,7 @@ var NAV = (function () {
         case 40: move("down"); e.preventDefault(); break;   // down
         case 13: select(); e.preventDefault(); break;       // enter / ok
         case 10009: // back (tecla remota Tizen)
+        case 27:    // Esc (equivalente al probar en un navegador de escritorio)
           if (typeof backHandler === "function") {
             backHandler();
           } else if (typeof tizen !== "undefined" && tizen.application) {
@@ -89,6 +103,8 @@ var NAV = (function () {
     setRows: setRows,
     applyFocus: applyFocus,
     setFocusChangeHandler: setFocusChangeHandler,
-    setBackHandler: setBackHandler
+    setBackHandler: setBackHandler,
+    setKeyHandler: setKeyHandler,
+    clearKeyHandler: clearKeyHandler
   };
 })();
