@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ReaTV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="logo">REA<span>TV</span></div>
+      <nav class="topnav">
+        <button class="nav-item focusable" data-nav="home">Inicio</button>
+        <button class="nav-item focusable" data-nav="series">Series</button>
+        <button class="nav-item focusable" data-nav="movies">Películas</button>
+        <button class="nav-item focusable" data-nav="mylist">Mi lista</button>
+        <button class="nav-item search-btn focusable" id="searchBtn" aria-label="Buscar">
+          <svg viewBox="0 0 24 24" width="1.2em" height="1.2em" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+            <line x1="21" y1="21" x2="16.2" y2="16.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Buscar
+        </button>
+      </nav>
+    </header>
+
+    <section class="hero" id="hero">
+      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-fade"></div>
+      <div class="hero-info">
+        <h1 id="heroTitle">Título destacado</h1>
+        <p id="heroDesc">Descripción breve del contenido destacado que aparece en el home, igual que en Netflix.</p>
+        <div class="hero-actions">
+          <button class="btn btn-play focusable" id="heroPlay">&#9654; Reproducir</button>
+          <button class="btn btn-info focusable" id="heroInfo">&#9432; Más info</button>
+        </div>
+      </div>
+    </section>
+
+    <main class="rows" id="rows"></main>
+
+    <div class="search-overlay hidden" id="searchOverlay">
+      <div class="search-topbar">
+        <button class="btn btn-play close-btn focusable" id="searchCloseBtn">&#10005;</button>
+        <div class="search-field">
+          <span id="searchQueryText"></span><span class="caret">|</span>
+        </div>
+      </div>
+      <div class="keyboard" id="keyboard"></div>
+      <div class="search-results-wrap">
+        <h2 class="row-title" id="searchResultsTitle">Escribe para buscar</h2>
+        <div class="row-track" id="searchResultsTrack"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

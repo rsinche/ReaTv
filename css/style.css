@@ -1,0 +1,365 @@
+:root {
+  --bg: #0f0f23;
+  --bg-glow: #1e1b4b;
+  --surface: #181818;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --accent: #e11d48;
+  --accent-2: #4338ca;
+  --border: #312e81;
+  --focus-scale: 1.12;
+  --row-gap: 3.2rem;
+  --radius-sm: 0.8rem;
+  --radius-md: 1.2rem;
+  --radius-pill: 999px;
+  --font: "Plus Jakarta Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+/*
+  Escalado fluido: 1rem = 1% del ancho de viewport * 10 (base 1920px -> 10px).
+  Con esto todo el layout escala proporcionalmente en cualquier resolucion de
+  TV (720p, 1080p, 4K) y tambien en ventanas de navegador de escritorio.
+  El clamp evita que el texto quede ilegible en ventanas muy angostas.
+*/
+html {
+  font-size: clamp(6px, calc(100vw / 192), 22px);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  background: radial-gradient(120% 90% at 85% -10%, var(--bg-glow) 0%, var(--bg) 55%);
+  color: var(--text);
+  font-family: var(--font);
+  font-weight: 400;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app { width: 100%; height: 100%; position: relative; }
+
+/* Top bar */
+.topbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 9rem;
+  display: flex;
+  align-items: center;
+  padding: 0 6rem;
+  gap: 6rem;
+  z-index: 20;
+  background: linear-gradient(to bottom, rgba(10,10,20,0.85), rgba(10,10,20,0));
+}
+
+.logo {
+  font-size: 3.4rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+  background: linear-gradient(90deg, var(--accent), #fb7185);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.logo span {
+  background: linear-gradient(90deg, #ffffff, #c7d2fe);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.topnav { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+
+.nav-item {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 2rem;
+  padding: 0.9rem 1.6rem;
+  cursor: pointer;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.nav-item.focused {
+  color: var(--text);
+  background: rgba(255,255,255,0.1);
+  transform: scale(1.06);
+  box-shadow: 0 0 0 0.15rem rgba(255,255,255,0.35);
+}
+
+.search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: auto;
+}
+
+/* Overlay de busqueda */
+.hidden { display: none !important; }
+
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: radial-gradient(120% 90% at 85% -10%, var(--bg-glow) 0%, #080814 55%);
+  padding: 5rem 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.6rem;
+}
+
+.search-topbar {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.search-field {
+  flex: 1;
+  font-family: var(--font);
+  font-size: 2.6rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.06);
+  border: 0.15rem solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.2rem 2rem;
+  min-height: 1.2em;
+  color: var(--text);
+}
+
+.caret {
+  animation: blink 1s step-end infinite;
+  opacity: 0.7;
+  margin-left: 0.2rem;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+.close-btn {
+  width: 4.6rem;
+  height: 4.6rem;
+  padding: 0;
+  justify-content: center;
+  font-size: 2rem;
+  flex: 0 0 auto;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.key-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.key {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1.8rem;
+  min-width: 4.6rem;
+  padding: 1.1rem 1rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.key-wide { min-width: 9rem; }
+
+.key.focused {
+  background: linear-gradient(90deg, var(--accent), #fb7185);
+  transform: scale(1.1);
+  box-shadow: 0 0 0 0.2rem rgba(255,255,255,0.85);
+}
+
+.search-results-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.search-results-wrap .row-track {
+  overflow: visible;
+  padding-top: 1rem;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 57.4vh;
+  min-height: 40rem;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: opacity 0.4s ease;
+}
+
+.hero-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(15,15,35,0) 35%,
+    rgba(15,15,35,0.9) 85%,
+    rgba(15,15,35,1) 100%
+  ), linear-gradient(to right, rgba(15,15,35,0.8) 0%, rgba(15,15,35,0.1) 55%);
+}
+
+.hero-info {
+  position: absolute;
+  left: 6rem;
+  right: 6rem;
+  bottom: 9rem;
+  max-width: 82rem;
+  z-index: 5;
+}
+
+.hero-info h1 {
+  font-size: clamp(2.8rem, 5vw, 5.6rem);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0 0 1.6rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+}
+
+.hero-info p {
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--muted);
+  margin: 0 0 2.8rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hero-actions { display: flex; gap: 1.6rem; flex-wrap: wrap; }
+
+.btn {
+  font-family: var(--font);
+  font-size: 2.1rem;
+  font-weight: 700;
+  padding: 1.3rem 3.2rem;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255,255,255,0.14);
+  color: var(--text);
+  white-space: nowrap;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.btn-play {
+  background: linear-gradient(90deg, var(--accent), #fb7185);
+  color: #ffffff;
+}
+
+.btn-info { backdrop-filter: blur(4px); }
+
+.btn.focused {
+  transform: scale(var(--focus-scale));
+  box-shadow: 0 0 0 0.3rem rgba(255,255,255,0.9), 0 0.8rem 2rem rgba(225,29,72,0.4);
+}
+
+/* Rows */
+.rows {
+  position: absolute;
+  top: 57.4vh;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2rem 0 2rem 6rem;
+  overflow: hidden;
+}
+
+.row {
+  margin-bottom: var(--row-gap);
+  position: relative;
+}
+
+.row-title {
+  font-size: 2.3rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  margin: 0 0 1.8rem;
+  color: var(--text);
+  position: relative;
+  z-index: 1;
+}
+
+.row-track {
+  display: flex;
+  gap: 2.2rem;
+  padding-top: 1rem;
+  transition: transform 0.25s ease;
+  will-change: transform;
+}
+
+.card {
+  flex: 0 0 auto;
+  width: min(28rem, 24vw);
+  height: calc(min(28rem, 24vw) * 0.5643);
+  border-radius: var(--radius-md);
+  background-size: cover;
+  background-position: center;
+  background-color: var(--surface);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transform-origin: 50% 0%;
+  display: flex;
+  align-items: flex-end;
+  box-shadow: 0 0.4rem 1.2rem rgba(0,0,0,0.35);
+}
+
+.card-title {
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 1.6rem;
+  padding: 0.9rem 1.1rem;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0));
+}
+
+.card.focused {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 0.3rem #ffffff, 0 0 2.4rem rgba(225,29,72,0.55), 0 1.2rem 2.4rem rgba(0,0,0,0.5);
+  z-index: 3;
+}
+
+/* Pantallas angostas (navegador de escritorio en ventana pequeña): */
+@media (max-width: 700px) {
+  .topbar { flex-wrap: wrap; height: auto; padding: 1rem 2rem; gap: 1.2rem; }
+  .topnav { gap: 0.8rem; }
+  .hero-info { left: 2rem; right: 2rem; bottom: 4rem; max-width: none; }
+  .rows { padding-left: 2rem; top: 50vh; }
+  .hero { height: 50vh; }
+}
